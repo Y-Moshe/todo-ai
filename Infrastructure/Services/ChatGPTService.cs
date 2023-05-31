@@ -20,10 +20,29 @@ public class ChatGPTService : IChatGPTService
 
     public async Task<string> GetTasksListAsJsonAsync(string todo)
     {
-        StringBuilder sb = new StringBuilder("Give me a list of tasks as JSON Format about ");
-        sb.Append(todo);
-        sb.Append(" While each task is object containing description of the task");
-        sb.Append(" and isDone property with default of false");
+        StringBuilder sb = new StringBuilder(
+            $"Give me a boards of tasks as JSON Format about {todo}");
+        sb.Append(" with the following structure: ");
+        sb.Append(@"
+            class Board
+            {
+                string name { get; set; }
+                Todo[] todos { get; set; }
+            }
+
+            class Todo
+            {
+                string title { get; set; }
+                SubTask[] subTasks { get; set; }
+            }
+
+            class SubTask
+            {
+                public string text { get; set; }
+                public bool isDone { get; set; }
+            }
+        ");
+        sb.Append(" the isDone property with default of false");
 
         var msg = new ChatMessage(ChatMessageRole.User, sb.ToString());
         var request = new ChatRequest
