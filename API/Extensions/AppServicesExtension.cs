@@ -15,6 +15,7 @@ public static class AppServicesExtension
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<ITodoService, TodoService>();
 
         services.AddSingleton<IChatGPTService, ChatGPTService>();
 

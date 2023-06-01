@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using OpenAI_API;
@@ -18,7 +20,7 @@ public class ChatGPTService : IChatGPTService
         _api = new OpenAIAPI(_config["OpenAPIKey"]);
     }
 
-    public async Task<string> GetTasksListAsJsonAsync(string todo)
+    public async Task<Board> GenerateTodoBoardAsync(string todo)
     {
         StringBuilder sb = new StringBuilder(
             $"Give me a boards of tasks as JSON Format about {todo}");
@@ -54,6 +56,10 @@ public class ChatGPTService : IChatGPTService
         };
 
         var result = await _api.Chat.CreateChatCompletionAsync(request);
-        return result.ToString();
+        var jsonOptions = new JsonSerializerOptions
+            { PropertyNameCaseInsensitive = true };
+
+        return JsonSerializer.Deserialize<Board>(
+            result.ToString(), jsonOptions);
     }
 }
