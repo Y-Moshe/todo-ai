@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 using API.Errors;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,20 +8,27 @@ namespace API.Controllers;
 [Route("api/todos")]
 public class TodoController : BaseApiController
 {
-    private readonly IChatGPTService _chatGPTService;
+    private readonly ITodoService _todoService;
 
-    public TodoController(IChatGPTService chatGPTService)
+    public TodoController(ITodoService todoService)
     {
-        _chatGPTService = chatGPTService;
+        _todoService = todoService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<string>> GetTodos([FromQuery] string todo)
+    public async Task<ActionResult<Board>> CreateBoard([FromQuery] string todo)
     {
         if (string.IsNullOrEmpty(todo))
             return BadRequest(new ApiErrorResponse(400, "Todo is required"));
 
-        var result = await _chatGPTService.GetTasksListAsJsonAsync(todo);
-        return result;
+        var result = await _todoService.CreateBoard(todo);
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Board>> GetBoard(int id)
+    {
+        var result = await _todoService.GetBoardAsync(id);
+        return Ok(result);
     }
 }
