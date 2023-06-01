@@ -479,4 +479,5 @@ $RECYCLE.BIN/
 # Added
 **/bin/
 **/obj/
+**.db
 wwwroot
