@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Core.Entities;
 
 public class SubTask : BaseEntity
@@ -6,5 +8,6 @@ public class SubTask : BaseEntity
     public bool IsDone { get; set; }
 
     public int TodoId { get; set; }
+    [JsonIgnore]
     public Todo Todo { get; set; }
 }
