@@ -30,7 +30,7 @@ public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
             query = query.Skip(spec.Skip).Take(spec.Take);
         }
 
-        query = spec.Includes.Aggregate(query, (curr, expression) => curr.Include(expression));
+        query = spec.Includes.Aggregate(query, (curr, include) => include(curr));
         return query;
     }
 }
