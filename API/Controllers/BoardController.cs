@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Route("api/todos")]
-public class TodoController : BaseApiController
+[Route("api/boards")]
+public class BoardController : BaseApiController
 {
-    private readonly ITodoService _todoService;
+    private readonly IBoardService _boardService;
 
-    public TodoController(ITodoService todoService)
+    public BoardController(IBoardService boardService)
     {
-        _todoService = todoService;
+        _boardService = boardService;
     }
 
     [HttpGet]
@@ -21,14 +21,14 @@ public class TodoController : BaseApiController
         if (string.IsNullOrEmpty(todo))
             return BadRequest(new ApiErrorResponse(400, "Todo is required"));
 
-        var result = await _todoService.CreateBoard(todo);
+        var result = await _boardService.CreateBoard(todo);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Board>> GetBoard(int id)
     {
-        var result = await _todoService.GetBoardAsync(id);
+        var result = await _boardService.GetBoardAsync(id);
         return Ok(result);
     }
 }

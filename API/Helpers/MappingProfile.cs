@@ -9,6 +9,8 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<AppUser, AppUserDto>()
-            .ForMember(d => d.FullName, u => u.MapFrom(_ => _.FirstName + " " + _.LastName));
+            .ForMember(
+                d => d.FullName,
+                u => u.MapFrom(_ => _.FirstName + " " + _.LastName));
     }
 }
