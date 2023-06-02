@@ -480,4 +480,6 @@ $RECYCLE.BIN/
 **/bin/
 **/obj/
 **.db
+**-shm
+**-wal
 wwwroot
