@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      dotnet: 7.0
+  pre_build:
+    commands:
+      - dotnet restore
+  build:
+    commands:
+      - dotnet build
+  post_build:
+    commands:
+      - dotnet publish -c Release -o publish --os linux
+artifacts:
+  files:
+    - '**/*'
