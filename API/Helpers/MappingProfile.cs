@@ -12,5 +12,6 @@ public class MappingProfile : Profile
             .ForMember(
                 d => d.FullName,
                 u => u.MapFrom(_ => _.FirstName + " " + _.LastName));
+        CreateMap<SubTaskDto, SubTask>();
     }
 }
