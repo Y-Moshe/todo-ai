@@ -16,6 +16,7 @@ public static class AppServicesExtension
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IBoardService, BoardService>();
+        services.AddScoped<ISubTaskService, SubTaskService>();
 
         services.AddSingleton<IChatGPTService, ChatGPTService>();
 

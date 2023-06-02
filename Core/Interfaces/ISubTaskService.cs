@@ -1,0 +1,12 @@
+using Core.Entities;
+
+namespace Core.Interfaces;
+
+public interface ISubTaskService
+{
+    Task<IReadOnlyList<SubTask>> ListCompletedSubTasksAsync();
+
+    Task<SubTask> CreateSubTaskAsync(SubTask subTask);
+    Task<SubTask> UpdateSubTaskAsync(SubTask subTask);
+    Task DeleteSubTaskAsync(int subTaskId);
+}
