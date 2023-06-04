@@ -1,1 +1,1 @@
-web: dotnet ./app/API.dll
+web: dotnet ./publish/API.dll
