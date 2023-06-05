@@ -7,6 +7,13 @@
     <UserSecretsId>0889f9dd-f77a-406d-9163-55089035a422</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <ContainerImageName>APIContainer</ContainerImageName>
+    <ContainerImageTags>latest</ContainerImageTags>
+    <PublishProfile>DefaultContainer</PublishProfile>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
@@ -16,6 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.302" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.111" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />

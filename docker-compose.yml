@@ -1,0 +1,11 @@
+version: '3.8'
+name: todo-ai
+services:
+    api:
+        container_name: todo-ai-service
+        image: apicontainer:latest
+        environment:
+            - ASPNETCORE_ENVIRONMENT=docker
+            - ASPNETCORE_URLS=http://+:80
+        ports:
+          - 80:80
