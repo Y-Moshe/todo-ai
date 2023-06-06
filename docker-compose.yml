@@ -1,5 +1,5 @@
-
 services:
+
     api:
         container_name: todo-ai-service
         image: apicontainer:latest
@@ -8,6 +8,10 @@ services:
             - ASPNETCORE_URLS=http://+:80
         ports:
           - 80:80
+        depends_on:
+            db:
+                condition: service_healthy
+
     db:
         container_name: mysqlcontainer
         image: mysql:latest
@@ -23,8 +27,15 @@ services:
             - '3306'
         volumes:
             - my-db:/var/lib/mysql
+        healthcheck:
+          test: "mysql --version"
+          interval: 10s
+          timeout: 5s
+          retries: 5
+
 secrets:
     db_root_password:
         file: './db_root_password.txt'
+
 volumes:
   my-db:
