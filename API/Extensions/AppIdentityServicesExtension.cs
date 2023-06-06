@@ -17,9 +17,7 @@ public static class AppIdentityServicesExtension
         services.AddScoped<IAccountService, AccountService>();
 
         services.AddDbContext<AppIdentityDbContext>(options =>
-        {
-            options.UseSqlite(config.GetConnectionString("IdentityConnection"));
-        });
+            options.UseMySQL(config.GetConnectionString("IdentityConnection")));
 
         services.AddIdentityCore<AppUser>(options =>
         {

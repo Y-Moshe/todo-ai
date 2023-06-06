@@ -20,10 +20,8 @@ public static class AppServicesExtension
 
         services.AddSingleton<IChatGPTService, ChatGPTService>();
 
-        services.AddDbContext<AppDbContext>(opt =>
-        {
-            opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
-        });
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseMySQL(config.GetConnectionString("DefaultConnection")));
 
         services.AddCors(options =>
         {
