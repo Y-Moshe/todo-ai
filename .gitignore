@@ -483,3 +483,4 @@ $RECYCLE.BIN/
 **-shm
 **-wal
 wwwroot
+db_root_password.txt
