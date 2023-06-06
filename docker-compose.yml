@@ -1,5 +1,4 @@
-version: '3.8'
-name: todo-ai
+
 services:
     api:
         container_name: todo-ai-service
@@ -9,3 +8,19 @@ services:
             - ASPNETCORE_URLS=http://+:80
         ports:
           - 80:80
+    db:
+        image: mysql:latest
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'todo-ai-db'
+            MYSQL_USER: 'dbUser'
+            MYSQL_PASSWORD: '12345'
+            MYSQL_ROOT_PASSWORD: 'toor12345'
+        ports:
+            - '3306:3306'
+        expose:
+            - '3306'
+        volumes:
+            - my-db:/var/lib/mysql
+volumes:
+  my-db:
