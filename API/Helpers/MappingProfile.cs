@@ -13,5 +13,11 @@ public class MappingProfile : Profile
                 d => d.FullName,
                 u => u.MapFrom(_ => _.FirstName + " " + _.LastName));
         CreateMap<SubTaskDto, SubTask>();
+        CreateMap<Board, ExcelBoardDto>();
+        CreateMap<Todo, ExcelTodoDto>();
+        CreateMap<SubTask, ExcelSubTaskDto>()
+            .ForMember(
+                d => d.IsDone,
+                u => u.MapFrom(_ => _.IsDone ? "Yes" : "No"));
     }
 }
