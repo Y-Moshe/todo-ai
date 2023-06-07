@@ -3,12 +3,16 @@ using Infrastructure.AppDb;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Repositories;
+using API.Helpers;
 
 namespace API.Extensions;
 
 public static class AppServicesExtension
 {
-    public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddAppServices(
+        this IServiceCollection services,
+        IConfiguration config,
+        IWebHostEnvironment environment)
     {
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -21,7 +25,13 @@ public static class AppServicesExtension
         services.AddSingleton<IChatGPTService, ChatGPTService>();
 
         services.AddDbContext<AppDbContext>(options =>
-            options.UseMySQL(config.GetConnectionString("DefaultConnection")));
+        {
+            string connectionString = environment.IsDevelopment()
+                ? config.GetConnectionString("DefaultConnection")
+                : AWS.GetRDSConnectionString(config, "todo-ai-db");
+
+            options.UseMySQL(connectionString);
+        });
 
         services.AddCors(options =>
         {

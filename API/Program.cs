@@ -8,8 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddAppServices(builder.Configuration);
-builder.Services.AddAppIdentityServices(builder.Configuration);
+
+builder.Services.AddAppServices(
+    builder.Configuration, builder.Environment);
+builder.Services.AddAppIdentityServices(
+    builder.Configuration, builder.Environment);
+
 builder.Services.AddSwaggerDocumentation();
 
 var app = builder.Build();

@@ -1,4 +1,5 @@
 using System.Text;
+using API.Helpers;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Identity;
@@ -12,12 +13,21 @@ namespace API.Extensions;
 
 public static class AppIdentityServicesExtension
 {
-    public static void AddAppIdentityServices(this IServiceCollection services, IConfiguration config)
+    public static void AddAppIdentityServices(
+        this IServiceCollection services,
+        IConfiguration config,
+        IWebHostEnvironment environment)
     {
         services.AddScoped<IAccountService, AccountService>();
 
         services.AddDbContext<AppIdentityDbContext>(options =>
-            options.UseMySQL(config.GetConnectionString("IdentityConnection")));
+        {
+            string connectionString = environment.IsDevelopment()
+                ? config.GetConnectionString("IdentityConnection")
+                : AWS.GetRDSConnectionString(config, "todo-ai-identity");
+
+            options.UseMySQL(connectionString);
+        });
 
         services.AddIdentityCore<AppUser>(options =>
         {
@@ -39,7 +49,8 @@ public static class AppIdentityServicesExtension
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(config["TokenKey"])),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
