@@ -1,5 +1,4 @@
 using System.Text;
-using API.Helpers;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Identity;
@@ -16,15 +15,15 @@ public static class AppIdentityServicesExtension
     public static void AddAppIdentityServices(
         this IServiceCollection services,
         IConfiguration config,
-        IWebHostEnvironment environment)
+        bool IsDevelopment)
     {
         services.AddScoped<IAccountService, AccountService>();
 
         services.AddDbContext<AppIdentityDbContext>(options =>
         {
-            string connectionString = environment.IsDevelopment()
+            string connectionString = IsDevelopment
                 ? config.GetConnectionString("IdentityConnection")
-                : AWS.GetRDSConnectionString(config, "todo-ai-identity");
+                : config.GetValue<string>("IdentityConnection");
 
             options.UseMySQL(connectionString);
         });

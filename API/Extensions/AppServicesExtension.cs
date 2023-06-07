@@ -3,7 +3,6 @@ using Infrastructure.AppDb;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Repositories;
-using API.Helpers;
 
 namespace API.Extensions;
 
@@ -12,7 +11,7 @@ public static class AppServicesExtension
     public static IServiceCollection AddAppServices(
         this IServiceCollection services,
         IConfiguration config,
-        IWebHostEnvironment environment)
+        bool IsDevelopment)
     {
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -26,9 +25,9 @@ public static class AppServicesExtension
 
         services.AddDbContext<AppDbContext>(options =>
         {
-            string connectionString = environment.IsDevelopment()
+            string connectionString = IsDevelopment
                 ? config.GetConnectionString("DefaultConnection")
-                : AWS.GetRDSConnectionString(config, "todo-ai-db");
+                : config.GetValue<string>("DefaultConnection");
 
             options.UseMySQL(connectionString);
         });
