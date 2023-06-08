@@ -1,6 +1,7 @@
 using API.Dtos;
 using AutoMapper;
 using Core.Entities;
+using Core.Excel;
 
 namespace API.Helpers;
 
@@ -13,9 +14,9 @@ public class MappingProfile : Profile
                 d => d.FullName,
                 u => u.MapFrom(_ => _.FirstName + " " + _.LastName));
         CreateMap<SubTaskDto, SubTask>();
-        CreateMap<Board, ExcelBoardDto>();
-        CreateMap<Todo, ExcelTodoDto>();
-        CreateMap<SubTask, ExcelSubTaskDto>()
+        CreateMap<Board, ExcelBoard>();
+        CreateMap<Todo, ExcelTodo>();
+        CreateMap<SubTask, ExcelSubTask>()
             .ForMember(
                 d => d.IsDone,
                 u => u.MapFrom(_ => _.IsDone ? "Yes" : "No"));

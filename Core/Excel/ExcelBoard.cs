@@ -1,13 +1,13 @@
 using System.Text.Json.Serialization;
 
-namespace API.Dtos;
+namespace Core.Excel;
 
-public class ExcelBoardDto
+public class ExcelBoard
 {
     [JsonIgnore]
     public int Id { get; set; }
     [JsonIgnore]
     public string Name { get; set; }
 
-    public IReadOnlyList<ExcelTodoDto> Todos { get; set; }
+    public IReadOnlyList<ExcelTodo> Todos { get; set; }
 }
