@@ -1,9 +1,9 @@
 using System.Drawing;
-using System.Text;
 using System.Text.Json;
 using Aspose.Cells;
 using Aspose.Cells.Utility;
 using Core.Entities;
+using Core.Excel;
 using Core.Interfaces;
 using Core.Specifications;
 
@@ -36,7 +36,7 @@ public class BoardService : IBoardService
         return await _boardRepo.GetEntityWithSpecAsync(spec);
     }
 
-    public void GenerateBoardExcelFileAsync(dynamic board)
+    public MemoryStream GenerateBoardExcelFileAsync(ExcelBoard board)
     {
         Workbook workbook = new Workbook();
         Worksheet worksheet = workbook.Worksheets[0];
@@ -68,10 +68,8 @@ public class BoardService : IBoardService
             new JsonLayoutOptions { ArrayAsTable = true };
         JsonUtility.ImportData(json, worksheet.Cells, 0, 0, layoutOptions);
 
-        StringBuilder fileName = new StringBuilder(board.Name);
-        fileName.Append(board.Name);
-        fileName.Append(".xlsx");
-
-        workbook.Save(fileName.ToString(), SaveFormat.Xlsx);
+        MemoryStream stream = new MemoryStream();
+        workbook.Save(stream, SaveFormat.Xlsx);
+        return stream;
     }
 }

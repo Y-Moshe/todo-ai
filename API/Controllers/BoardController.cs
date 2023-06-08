@@ -2,6 +2,7 @@ using API.Dtos;
 using API.Errors;
 using AutoMapper;
 using Core.Entities;
+using Core.Excel;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,15 +41,18 @@ public class BoardController : BaseApiController
     }
 
     [HttpGet("{id}/excel")]
-    public async Task<ActionResult<Board>> GetBoardExcel(int id)
+    public async Task<IActionResult> GetBoardExcel(int id)
     {
         var board = await _boardService.GetBoardAsync(id);
         if (board == null) return NotFound(
             new ApiErrorResponse(404, "Board was not found not"));
 
-        var excelMappedBoard = _mapper.Map<ExcelBoardDto>(board);
-        _boardService.GenerateBoardExcelFileAsync(excelMappedBoard);
+        var excelMappedBoard = _mapper.Map<ExcelBoard>(board);
+        MemoryStream stream = _boardService
+            .GenerateBoardExcelFileAsync(excelMappedBoard);
 
-        return Ok();
+        string fileName = $"{board.Name}.xlsx";
+        string mimeType = "application/octet-stream";
+        return File(stream.ToArray(), mimeType, fileName);
     }
 }
