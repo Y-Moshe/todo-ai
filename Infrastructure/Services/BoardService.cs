@@ -75,6 +75,7 @@ public class BoardService : IBoardService
 
     public async Task<IReadOnlyList<Board>> GetBoardsAsync()
     {
-        return await _boardRepo.ListAllAsync();
+        var spec = new FullyPopulatedBoardSpec();
+        return await _boardRepo.ListAllWithSpecAsync(spec);
     }
 }
