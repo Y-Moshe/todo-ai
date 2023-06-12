@@ -2,5 +2,5 @@ namespace API.Dtos;
 
 public class CreateBoardDto
 {
-    public string Todo { get; set; }
+    public string Prompt { get; set; }
 }

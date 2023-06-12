@@ -20,13 +20,20 @@ public class BoardController : BaseApiController
         _boardService = boardService;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<Board>>> GetBoards()
+    {
+        var result = await _boardService.GetBoardsAsync();
+        return Ok(result);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Board>> CreateBoard(CreateBoardDto payload)
     {
-        if (string.IsNullOrEmpty(payload.Todo))
-            return BadRequest(new ApiErrorResponse(400, "Todo is required"));
+        if (string.IsNullOrEmpty(payload.Prompt))
+            return BadRequest(new ApiErrorResponse(400, "Prompt is required"));
 
-        var result = await _boardService.CreateBoard(payload.Todo);
+        var result = await _boardService.CreateBoardAsync(payload.Prompt);
         return Ok(result);
     }
 

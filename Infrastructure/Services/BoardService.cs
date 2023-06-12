@@ -20,9 +20,9 @@ public class BoardService : IBoardService
         _boardRepo = repo;
     }
 
-    public async Task<Board> CreateBoard(string todo)
+    public async Task<Board> CreateBoardAsync(string prompt)
     {
-        var board = await _chatGPTService.GenerateTodoBoardAsync(todo);
+        var board = await _chatGPTService.GenerateTodoBoardAsync(prompt);
 
         _boardRepo.Add(board);
         await _boardRepo.SaveChangesAsync();
@@ -71,5 +71,10 @@ public class BoardService : IBoardService
         MemoryStream stream = new MemoryStream();
         workbook.Save(stream, SaveFormat.Xlsx);
         return stream;
+    }
+
+    public async Task<IReadOnlyList<Board>> GetBoardsAsync()
+    {
+        return await _boardRepo.ListAllAsync();
     }
 }
