@@ -29,8 +29,6 @@ public class SubTaskService : ISubTaskService
 
     public async Task<SubTask> UpdateSubTaskAsync(SubTask subTask)
     {
-        if (!await IsExists(subTask.Id)) return null;
-
         _subTaskRepo.Update(subTask);
         await _subTaskRepo.SaveChangesAsync();
         return subTask;
@@ -38,16 +36,8 @@ public class SubTaskService : ISubTaskService
 
     public async Task DeleteSubTaskAsync(int subTaskId)
     {
-        if (!await IsExists(subTaskId)) return;
-
         var subTask = new SubTask { Id = subTaskId };
         _subTaskRepo.Delete(subTask);
         await _subTaskRepo.SaveChangesAsync();
-    }
-
-    private async Task<bool> IsExists(int subTaskId)
-    {
-        var subTask = await _subTaskRepo.GetEntityByIdAsync(subTaskId);
-        return subTask != null;
     }
 }
