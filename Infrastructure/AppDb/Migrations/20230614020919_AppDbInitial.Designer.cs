@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230606135226_AppDbInitial")]
+    [Migration("20230614020919_AppDbInitial")]
     partial class AppDbInitial
     {
         /// <inheritdoc />
@@ -30,6 +30,9 @@ namespace Infrastructure.AppDb.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Boards");
@@ -43,6 +46,9 @@ namespace Infrastructure.AppDb.Migrations
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .HasColumnType("longtext");
@@ -64,6 +70,9 @@ namespace Infrastructure.AppDb.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
