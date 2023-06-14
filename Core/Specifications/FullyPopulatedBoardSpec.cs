@@ -7,15 +7,17 @@ public class FullyPopulatedBoardSpec : BaseSpecification<Board>
 {
     public FullyPopulatedBoardSpec() : base()
     {
+        AddOrderBy(a => a.Order);
         AddInclude(a => a
-            .Include(b => b.Todos)
-            .ThenInclude(c => c.SubTasks));
+            .Include(b => b.Todos.OrderBy(d => d.Order))
+            .ThenInclude(c => c.SubTasks.OrderBy(e => e.Order)));
     }
 
     public FullyPopulatedBoardSpec(int boardId) : base(b => b.Id == boardId)
     {
+        AddOrderBy(a => a.Order);
         AddInclude(a => a
-            .Include(b => b.Todos)
-            .ThenInclude(c => c.SubTasks));
+            .Include(b => b.Todos.OrderBy(d => d.Order))
+            .ThenInclude(c => c.SubTasks.OrderBy(e => e.Order)));
     }
 }
