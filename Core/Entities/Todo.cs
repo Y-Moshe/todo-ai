@@ -6,6 +6,7 @@ public class Todo : BaseEntity
 {
     public string Title { get; set; }
     public IReadOnlyList<SubTask> SubTasks { get; set; }
+    public int Order { get; set; }
 
     public int BoardId { get; set; }
     [JsonIgnore]
