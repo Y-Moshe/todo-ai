@@ -3,6 +3,8 @@ using Infrastructure.AppDb;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using API.Errors;
 
 namespace API.Extensions;
 
@@ -23,6 +25,23 @@ public static class AppServicesExtension
         services.AddScoped<ISubTaskService, SubTaskService>();
 
         services.AddSingleton<IChatGPTService, ChatGPTService>();
+
+        services.Configure<ApiBehaviorOptions>(config =>
+        {
+            config.InvalidModelStateResponseFactory = actionContext =>
+            {
+                var errors = actionContext.ModelState
+                    .Where(e => e.Value.Errors.Count > 0)
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(x => x.ErrorMessage)
+                    .ToArray();
+
+                var errorResponse = new ApiValidationErrorResponse
+                { Errors = errors };
+
+                return new BadRequestObjectResult(errorResponse);
+            };
+        });
 
         services.AddDbContext<AppDbContext>(options =>
         {
