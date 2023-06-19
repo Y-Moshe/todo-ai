@@ -4,5 +4,5 @@ namespace Core.Interfaces;
 
 public interface IChatGPTService
 {
-    public Task<Board> GenerateTodoBoardAsync(string todo);
+    public Task<Board> GenerateBoardAsync(string todo);
 }

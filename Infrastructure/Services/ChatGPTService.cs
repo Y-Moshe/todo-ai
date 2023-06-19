@@ -20,7 +20,7 @@ public class ChatGPTService : IChatGPTService
         _api = new OpenAIAPI(_config["OpenAPIKey"]);
     }
 
-    public async Task<Board> GenerateTodoBoardAsync(string todo)
+    public async Task<Board> GenerateBoardAsync(string todo)
     {
         StringBuilder sb = new StringBuilder(
             $"Give me a boards of tasks as JSON Format about {todo}");
@@ -44,7 +44,8 @@ public class ChatGPTService : IChatGPTService
                 public bool isDone { get; set; }
             }
         ");
-        sb.Append(" the isDone property with default of false");
+        sb.Append(@" the isDone property with default of false, 
+            use a valid JSON Format! and use escape characters as necessary!");
 
         var msg = new ChatMessage(ChatMessageRole.User, sb.ToString());
         var request = new ChatRequest
@@ -57,7 +58,7 @@ public class ChatGPTService : IChatGPTService
 
         var result = await _api.Chat.CreateChatCompletionAsync(request);
         var jsonOptions = new JsonSerializerOptions
-            { PropertyNameCaseInsensitive = true };
+        { PropertyNameCaseInsensitive = true };
 
         return JsonSerializer.Deserialize<Board>(
             result.ToString(), jsonOptions);
