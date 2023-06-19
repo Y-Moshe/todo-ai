@@ -9,6 +9,6 @@ public class PopulatedBoardTodosSpec : BaseSpecification<Todo>
         : base(t => t.BoardId == boardId)
     {
         AddOrderBy(a => a.Order);
-        AddInclude(a => a.Include(b => b.SubTasks));
+        AddInclude(a => a.Include(b => b.SubTasks.OrderBy(c => c.Order)));
     }
 }

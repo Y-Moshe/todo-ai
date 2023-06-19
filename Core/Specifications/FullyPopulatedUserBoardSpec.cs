@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Specifications;
 
-public class FullyPopulatedBoardSpec : BaseSpecification<Board>
+public class FullyPopulatedUserBoardSpec : BaseSpecification<Board>
 {
-    public FullyPopulatedBoardSpec() : base()
+    public FullyPopulatedUserBoardSpec(string userId)
+        : base(b => b.AppUserId == userId)
     {
         AddOrderBy(a => a.Order);
         AddInclude(a => a
@@ -13,7 +14,8 @@ public class FullyPopulatedBoardSpec : BaseSpecification<Board>
             .ThenInclude(c => c.SubTasks.OrderBy(e => e.Order)));
     }
 
-    public FullyPopulatedBoardSpec(int boardId) : base(b => b.Id == boardId)
+    public FullyPopulatedUserBoardSpec(int boardId, string userId)
+        : base(b => b.Id == boardId && b.AppUserId == userId)
     {
         AddOrderBy(a => a.Order);
         AddInclude(a => a
