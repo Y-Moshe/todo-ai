@@ -8,6 +8,7 @@ public class SubTask : BaseEntity
     public bool IsDone { get; set; }
     public int Order { get; set; }
 
+    public string AppUserId { get; set; }
     public int TodoId { get; set; }
     [JsonIgnore]
     public Todo Todo { get; set; }

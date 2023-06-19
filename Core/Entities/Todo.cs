@@ -8,6 +8,7 @@ public class Todo : BaseEntity
     public IReadOnlyList<SubTask> SubTasks { get; set; }
     public int Order { get; set; }
 
+    public string AppUserId { get; set; }
     public int BoardId { get; set; }
     [JsonIgnore]
     public Board Board { get; set; }
