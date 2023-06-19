@@ -4,18 +4,22 @@ using AutoMapper;
 using Core.Entities;
 using Core.Excel;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Route("api/boards")]
+[Authorize]
 public class BoardController : BaseApiController
 {
     private readonly IBoardService _boardService;
     private readonly IMapper _mapper;
+    private readonly IChatGPTService _chatGPTService;
 
-    public BoardController(IBoardService boardService, IMapper mapper)
+    public BoardController(IBoardService boardService, IMapper mapper, IChatGPTService chatGPTService)
     {
+        _chatGPTService = chatGPTService;
         _mapper = mapper;
         _boardService = boardService;
     }
@@ -28,12 +32,17 @@ public class BoardController : BaseApiController
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<Board>> CreateBoard(CreateBoardDto payload)
     {
-        if (string.IsNullOrEmpty(payload.Prompt))
-            return BadRequest(new ApiErrorResponse(400, "Prompt is required"));
+        bool isLoggedIn = User.Identity.IsAuthenticated;
 
-        var result = await _boardService.CreateBoardAsync(payload.Prompt);
+        var board = await _chatGPTService.GenerateBoardAsync(payload.Prompt);
+        Board result = board;
+
+        if (isLoggedIn)
+            result = await _boardService.CreateBoardAsync(board);
+
         return Ok(result);
     }
 

@@ -3,11 +3,13 @@ using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Route("api/subtasks")]
+[Authorize]
 public class SubTaskController : BaseApiController
 {
     private readonly ISubTaskService _subTaskService;

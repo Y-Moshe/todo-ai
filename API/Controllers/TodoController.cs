@@ -1,10 +1,12 @@
 using API.Dtos;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Route("api/todos")]
+[Authorize]
 public class TodoController : BaseApiController
 {
     private readonly ITodoService _todoService;

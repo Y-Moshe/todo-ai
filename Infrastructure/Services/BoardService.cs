@@ -12,18 +12,14 @@ namespace Infrastructure.Services;
 public class BoardService : IBoardService
 {
     private readonly IGenericRepository<Board> _boardRepo;
-    private readonly IChatGPTService _chatGPTService;
 
     public BoardService(IGenericRepository<Board> repo, IChatGPTService chatGPTService)
     {
-        _chatGPTService = chatGPTService;
         _boardRepo = repo;
     }
 
-    public async Task<Board> CreateBoardAsync(string prompt)
+    public async Task<Board> CreateBoardAsync(Board board)
     {
-        var board = await _chatGPTService.GenerateTodoBoardAsync(prompt);
-
         _boardRepo.Add(board);
         await _boardRepo.SaveChangesAsync();
 
