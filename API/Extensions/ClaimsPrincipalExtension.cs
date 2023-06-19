@@ -9,4 +9,11 @@ public static class ClaimsPrincipalExtension
         return principal.FindFirstValue(ClaimTypes.Email);
     }
 
+    public static string GetUserId(this ClaimsPrincipal principal)
+    {
+        if (principal == null)
+            throw new ArgumentNullException(nameof(principal));
+
+        return principal.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }
