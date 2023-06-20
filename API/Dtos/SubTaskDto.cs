@@ -15,4 +15,6 @@ public class SubTaskDto
     public bool IsDone { get; set; }
     [Required]
     public int TodoId { get; set; }
+    [Required]
+    public string AppUserId { get; set; }
 }
