@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Core.Entities;
@@ -8,6 +9,7 @@ public class Todo : BaseEntity
     public IReadOnlyList<SubTask> SubTasks { get; set; }
     public int Order { get; set; }
 
+    [ConcurrencyCheck]
     public string AppUserId { get; set; }
     public int BoardId { get; set; }
     [JsonIgnore]
