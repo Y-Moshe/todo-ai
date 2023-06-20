@@ -21,7 +21,8 @@ namespace Infrastructure.AppDb.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: true),
-                    Order = table.Column<int>(type: "int", nullable: false)
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,6 +38,7 @@ namespace Infrastructure.AppDb.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext", nullable: true),
                     Order = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "longtext", nullable: true),
                     BoardId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -60,6 +62,7 @@ namespace Infrastructure.AppDb.Migrations
                     Text = table.Column<string>(type: "longtext", nullable: true),
                     IsDone = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "longtext", nullable: true),
                     TodoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

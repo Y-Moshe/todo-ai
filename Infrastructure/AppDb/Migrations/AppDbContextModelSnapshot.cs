@@ -24,6 +24,10 @@ namespace Infrastructure.AppDb.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("AppUserId")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -40,6 +44,10 @@ namespace Infrastructure.AppDb.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("AppUserId")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("tinyint(1)");
@@ -65,6 +73,10 @@ namespace Infrastructure.AppDb.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("AppUserId")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
