@@ -5,8 +5,8 @@ namespace Core.Interfaces;
 
 public interface IBoardService
 {
-    Task<IReadOnlyList<Board>> GetBoardsAsync();
-    Task<Board> CreateBoardAsync(Board board);
-    Task<Board> GetBoardAsync(int boardId);
+    Task<IReadOnlyList<Board>> GetUserBoardsAsync(string userId);
+    Task<Board> GetUserBoardAsync(int boardId, string userId);
+    Task<Board> CreateUserBoardAsync(Board board, string userId);
     MemoryStream GenerateBoardExcelFileAsync(ExcelBoard board);
 }

@@ -1,5 +1,6 @@
 using API.Dtos;
 using API.Errors;
+using API.Extensions;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -25,7 +26,8 @@ public class SubTaskController : BaseApiController
     public async Task<ActionResult<IReadOnlyList<SubTask>>>
         GetCompletedSubTasksAsync()
     {
-        var list = await _subTaskService.ListCompletedSubTasksAsync();
+        string userId = User.GetUserId();
+        var list = await _subTaskService.ListCompletedUserSubTasksAsync(userId);
         return Ok(list);
     }
 
@@ -33,6 +35,7 @@ public class SubTaskController : BaseApiController
     public async Task<ActionResult<SubTask>> CreateSubTask(SubTaskDto taskDto)
     {
         var subTask = _mapper.Map<SubTask>(taskDto);
+        subTask.AppUserId = User.GetUserId();
         await _subTaskService.CreateSubTaskAsync(subTask);
         return Ok(subTask);
     }

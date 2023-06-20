@@ -1,5 +1,6 @@
 using API.Dtos;
 using API.Errors;
+using API.Extensions;
 using AutoMapper;
 using Core.Entities;
 using Core.Excel;
@@ -14,20 +15,21 @@ namespace API.Controllers;
 public class BoardController : BaseApiController
 {
     private readonly IBoardService _boardService;
-    private readonly IMapper _mapper;
     private readonly IChatGPTService _chatGPTService;
+    private readonly IMapper _mapper;
 
     public BoardController(IBoardService boardService, IMapper mapper, IChatGPTService chatGPTService)
     {
         _chatGPTService = chatGPTService;
-        _mapper = mapper;
         _boardService = boardService;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Board>>> GetBoards()
+    public async Task<ActionResult<IReadOnlyList<Board>>> GetUserBoards()
     {
-        var result = await _boardService.GetBoardsAsync();
+        string userId = User.GetUserId();
+        var result = await _boardService.GetUserBoardsAsync(userId);
         return Ok(result);
     }
 
@@ -36,12 +38,13 @@ public class BoardController : BaseApiController
     public async Task<ActionResult<Board>> CreateBoard(CreateBoardDto payload)
     {
         bool isLoggedIn = User.Identity.IsAuthenticated;
+        string userId = User.GetUserId();
 
         var board = await _chatGPTService.GenerateBoardAsync(payload.Prompt);
         Board result = board;
 
         if (isLoggedIn)
-            result = await _boardService.CreateBoardAsync(board);
+            result = await _boardService.CreateUserBoardAsync(board, userId);
 
         return Ok(result);
     }
@@ -49,7 +52,8 @@ public class BoardController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult<Board>> GetBoard(int id)
     {
-        var result = await _boardService.GetBoardAsync(id);
+        string userId = User.GetUserId();
+        var result = await _boardService.GetUserBoardAsync(id, userId);
 
         if (result == null) return NotFound(
             new ApiErrorResponse(404, "Board was not found not"));
@@ -59,7 +63,8 @@ public class BoardController : BaseApiController
     [HttpGet("{id}/excel")]
     public async Task<IActionResult> GetBoardExcel(int id)
     {
-        var board = await _boardService.GetBoardAsync(id);
+        string userId = User.GetUserId();
+        var board = await _boardService.GetUserBoardAsync(id, userId);
         if (board == null) return NotFound(
             new ApiErrorResponse(404, "Board was not found not"));
 

@@ -18,17 +18,28 @@ public class BoardService : IBoardService
         _boardRepo = repo;
     }
 
-    public async Task<Board> CreateBoardAsync(Board board)
+    public async Task<Board> CreateUserBoardAsync(Board board, string userId)
     {
+        board.AppUserId = userId;
+        foreach (var todo in board.Todos)
+        {
+            todo.AppUserId = userId;
+
+            foreach (var subtask in todo.SubTasks)
+            {
+                subtask.AppUserId = userId;
+            }
+        }
+
         _boardRepo.Add(board);
         await _boardRepo.SaveChangesAsync();
 
         return board;
     }
 
-    public async Task<Board> GetBoardAsync(int boardId)
+    public async Task<Board> GetUserBoardAsync(int boardId, string userId)
     {
-        var spec = new FullyPopulatedBoardSpec(boardId);
+        var spec = new FullyPopulatedUserBoardSpec(boardId, userId);
         return await _boardRepo.GetEntityWithSpecAsync(spec);
     }
 
@@ -69,9 +80,9 @@ public class BoardService : IBoardService
         return stream;
     }
 
-    public async Task<IReadOnlyList<Board>> GetBoardsAsync()
+    public async Task<IReadOnlyList<Board>> GetUserBoardsAsync(string userId)
     {
-        var spec = new FullyPopulatedBoardSpec();
+        var spec = new FullyPopulatedUserBoardSpec(userId);
         return await _boardRepo.ListAllWithSpecAsync(spec);
     }
 }

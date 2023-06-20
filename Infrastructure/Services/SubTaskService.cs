@@ -13,9 +13,10 @@ public class SubTaskService : ISubTaskService
         _subTaskRepo = repo;
     }
 
-    public async Task<IReadOnlyList<SubTask>> ListCompletedSubTasksAsync()
+    public async Task<IReadOnlyList<SubTask>> ListCompletedUserSubTasksAsync(
+        string userId)
     {
-        var spec = new CompletedSubTasksSpec();
+        var spec = new CompletedUserSubTasksSpec(userId);
         var subTasks = await _subTaskRepo.ListAllWithSpecAsync(spec);
         return subTasks;
     }
