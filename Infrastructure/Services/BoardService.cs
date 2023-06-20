@@ -37,6 +37,31 @@ public class BoardService : IBoardService
         return board;
     }
 
+    public async Task<Board[]> CreateUserBoardsAsync(Board[] boards, string userId)
+    {
+        foreach (var board in boards)
+        {
+            board.Id = 0;
+            board.AppUserId = userId;
+            foreach (var todo in board.Todos)
+            {
+                todo.Id = 0;
+                todo.AppUserId = userId;
+
+                foreach (var subtask in todo.SubTasks)
+                {
+                    subtask.Id = 0;
+                    subtask.AppUserId = userId;
+                }
+            }
+        }
+
+        _boardRepo.AddRange(boards);
+        await _boardRepo.SaveChangesAsync();
+
+        return boards;
+    }
+
     public async Task<Board> GetUserBoardAsync(int boardId, string userId)
     {
         var spec = new FullyPopulatedUserBoardSpec(boardId, userId);

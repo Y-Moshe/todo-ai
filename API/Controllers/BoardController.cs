@@ -49,6 +49,16 @@ public class BoardController : BaseApiController
         return Ok(result);
     }
 
+    [HttpPost("many")]
+    public async Task<ActionResult<Board>> AddManyBoards(CreateBoardsDto payload)
+    {
+        string userId = User.GetUserId();
+        var result = await _boardService.CreateUserBoardsAsync(
+            payload.Boards, userId);
+
+        return Ok(result);
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Board>> GetBoard(int id)
     {

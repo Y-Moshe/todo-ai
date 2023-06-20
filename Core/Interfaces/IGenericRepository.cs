@@ -11,6 +11,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<int> GetCountWithSpecAsync(ISpecification<T> spec);
 
     void Add(T entity);
+    void AddRange(T[] entity);
     void Update(T entity);
     void Delete(T entity);
     Task<int> SaveChangesAsync();

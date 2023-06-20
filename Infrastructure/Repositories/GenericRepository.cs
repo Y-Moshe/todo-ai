@@ -50,6 +50,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context.Entry(entity).State = EntityState.Added;
     }
 
+    public void AddRange(T[] entities)
+    {
+        _context.Set<T>().AddRange(entities);
+    }
+
     public void Update(T entity)
     {
         _context.Set<T>().Attach(entity);
