@@ -105,9 +105,38 @@ public class BoardService : IBoardService
         return stream;
     }
 
-    public async Task<IReadOnlyList<Board>> GetUserBoardsAsync(string userId)
+    public async Task<IReadOnlyList<Board>> ListUserBoardsAsync(string userId)
     {
         var spec = new FullyPopulatedUserBoardSpec(userId);
         return await _boardRepo.ListAllWithSpecAsync(spec);
+    }
+
+    public async Task<Board> UpdateUserBoardAsync(Board board)
+    {
+        _boardRepo.Update(board);
+        await _boardRepo.SaveChangesAsync();
+        return board;
+    }
+
+    public async Task UpdateUserBoardStatusAsync(
+        int boardId, string userId, bool status)
+    {
+        var board = await this.GetUserBoardAsync(boardId, userId);
+
+        foreach (var todo in board.Todos)
+        {
+            foreach (var task in todo.SubTasks)
+            {
+                task.IsDone = status;
+            }
+        }
+
+        await _boardRepo.SaveChangesAsync();
+    }
+
+    public async Task DeleteUserBoardAsync(Board board)
+    {
+        _boardRepo.Delete(board);
+        await _boardRepo.SaveChangesAsync();
     }
 }

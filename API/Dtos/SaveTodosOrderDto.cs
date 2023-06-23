@@ -2,8 +2,9 @@ using Core.Dtos;
 
 namespace API.Dtos;
 
-public class SaveTodosOrderDto
+public class SaveItemsOrderDto
 {
-    public int BoardId { get; set; }
-    public List<TodoOrderSaveDto> Todos { get; set; }
+    public int? BoardId { get; set; }
+    public int? TodoId { get; set; }
+    public List<OrderedItem> Todos { get; set; }
 }

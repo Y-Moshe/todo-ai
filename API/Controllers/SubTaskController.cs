@@ -42,10 +42,12 @@ public class SubTaskController : BaseApiController
 
     [HttpPut("{id}")]
     public async Task<ActionResult<SubTask>> UpdateSubTask(
-        int id, [FromBody] SubTaskDto taskDto)
+        int id, SubTaskDto taskDto)
     {
-        taskDto.Id = id;
         var subTask = _mapper.Map<SubTask>(taskDto);
+        subTask.Id = id;
+        subTask.AppUserId = User.GetUserId();
+
         var result = await _subTaskService.UpdateSubTaskAsync(subTask);
 
         if (result == null) return NotFound(
@@ -56,6 +58,7 @@ public class SubTaskController : BaseApiController
     [HttpDelete("{id}")]
     public async Task DeleteSubTask(int id)
     {
-        await _subTaskService.DeleteSubTaskAsync(id);
+        var subTask = new SubTask { Id = id, AppUserId = User.GetUserId() };
+        await _subTaskService.DeleteSubTaskAsync(subTask);
     }
 }

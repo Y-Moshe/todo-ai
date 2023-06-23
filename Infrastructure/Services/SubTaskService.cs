@@ -35,9 +35,8 @@ public class SubTaskService : ISubTaskService
         return subTask;
     }
 
-    public async Task DeleteSubTaskAsync(int subTaskId)
+    public async Task DeleteSubTaskAsync(SubTask subTask)
     {
-        var subTask = new SubTask { Id = subTaskId };
         _subTaskRepo.Delete(subTask);
         await _subTaskRepo.SaveChangesAsync();
     }

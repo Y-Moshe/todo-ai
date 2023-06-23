@@ -9,5 +9,5 @@ public interface ISubTaskService
 
     Task<SubTask> CreateSubTaskAsync(SubTask subTask);
     Task<SubTask> UpdateSubTaskAsync(SubTask subTask);
-    Task DeleteSubTaskAsync(int subTaskId);
+    Task DeleteSubTaskAsync(SubTask subTask);
 }

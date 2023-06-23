@@ -29,7 +29,7 @@ public class BoardController : BaseApiController
     public async Task<ActionResult<IReadOnlyList<Board>>> GetUserBoards()
     {
         string userId = User.GetUserId();
-        var result = await _boardService.GetUserBoardsAsync(userId);
+        var result = await _boardService.ListUserBoardsAsync(userId);
         return Ok(result);
     }
 
@@ -68,6 +68,41 @@ public class BoardController : BaseApiController
         if (result == null) return NotFound(
             new ApiErrorResponse(404, "Board was not found not"));
         return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Board>> UpdateBoard(
+        int id, UpdateBoardDto boardDto)
+    {
+        string userId = User.GetUserId();
+        var board = _mapper.Map<Board>(boardDto);
+        board.Id = id;
+        board.AppUserId = userId;
+
+        var result = await _boardService.UpdateUserBoardAsync(board);
+
+        if (result == null) return NotFound(
+            new ApiErrorResponse(404, "Board was not found not"));
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/status")]
+    public async Task<ActionResult> UpdateBoardStatus(
+        int id, UpdateStatusDto statusDto)
+    {
+        string userId = User.GetUserId();
+        await _boardService.UpdateUserBoardStatusAsync(
+            id, userId, statusDto.Status);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteBoard(int id)
+    {
+        string userId = User.GetUserId();
+        var board = new Board { Id = id, AppUserId = userId };
+        await _boardService.DeleteUserBoardAsync(board);
+        return Ok();
     }
 
     [HttpGet("{id}/excel")]

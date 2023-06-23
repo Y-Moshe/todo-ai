@@ -15,6 +15,8 @@ public class MappingProfile : Profile
                 u => u.MapFrom(_ => _.FirstName + " " + _.LastName));
         CreateMap<SubTaskDto, SubTask>();
         CreateMap<Board, ExcelBoard>();
+        CreateMap<UpdateBoardDto, Board>();
+        CreateMap<UpdateTodoDto, Todo>();
         CreateMap<Todo, ExcelTodo>();
         CreateMap<SubTask, ExcelSubTask>()
             .ForMember(
