@@ -27,7 +27,7 @@ public class TodoService : ITodoService
         await _repository.SaveChangesAsync();
     }
 
-    public async Task<IReadOnlyList<Todo>> GetBoardTodosAsync(int boardId)
+    public async Task<IReadOnlyList<Todo>> ListTodosAsync(int boardId)
     {
         var spec = new PopulatedBoardTodosSpec(boardId);
         return await _repository.ListAllWithSpecAsync(spec);
@@ -35,7 +35,7 @@ public class TodoService : ITodoService
 
     public async Task SaveTodosOrderAsync(int boardId, List<OrderedItem> orderedTodos)
     {
-        var todos = await this.GetBoardTodosAsync(boardId);
+        var todos = await this.ListTodosAsync(boardId);
         foreach (var todo in todos)
         {
             var shortTodo = orderedTodos.Find(a => a.Id == todo.Id);
@@ -50,6 +50,12 @@ public class TodoService : ITodoService
         _repository.Update(todo);
         await _repository.SaveChangesAsync();
         return todo;
+    }
+
+    public async Task<Todo> GetTodoAsync(int todoId, string userId)
+    {
+        var spec = new PopulatedTodoSpec(todoId, userId);
+        return await _repository.GetEntityWithSpecAsync(spec);
     }
 
     public async Task UpdateTodoStatusAsync(int todoId, string userId, bool status)

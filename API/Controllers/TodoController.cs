@@ -22,6 +22,13 @@ public class TodoController : BaseApiController
         _todoService = todoService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetTodo(int id)
+    {
+        var todo = await _todoService.GetTodoAsync(id, User.GetUserId());
+        return Ok(todo);
+    }
+
     [HttpPost("orders")]
     public async Task<ActionResult> SaveTodosOrder(SaveItemsOrderDto order)
     {
@@ -39,8 +46,7 @@ public class TodoController : BaseApiController
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Todo>> UpdateTodo(
-        int id, UpdateTodoDto taskDto)
+    public async Task<ActionResult<Todo>> UpdateTodo(int id, UpdateTodoDto taskDto)
     {
         var todo = _mapper.Map<Todo>(taskDto);
         todo.Id = id;
@@ -48,18 +54,16 @@ public class TodoController : BaseApiController
 
         var result = await _todoService.UpdateTodoAsync(todo);
 
-        if (result == null) return NotFound(
-            new ApiErrorResponse(404, "Todo not found!"));
+        if (result == null)
+            return NotFound(new ApiErrorResponse(404, "Todo not found!"));
         return Ok(result);
     }
 
     [HttpPut("{id}/status")]
-    public async Task<ActionResult> UpdateBoardStatus(
-    int id, UpdateStatusDto statusDto)
+    public async Task<ActionResult> UpdateBoardStatus(int id, UpdateStatusDto statusDto)
     {
         string userId = User.GetUserId();
-        await _todoService.UpdateTodoStatusAsync(
-            id, userId, statusDto.Status);
+        await _todoService.UpdateTodoStatusAsync(id, userId, statusDto.Status);
         return Ok();
     }
 
