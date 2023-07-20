@@ -13,8 +13,7 @@ public class SubTaskService : ISubTaskService
         _subTaskRepo = repo;
     }
 
-    public async Task<IReadOnlyList<SubTask>> ListCompletedUserSubTasksAsync(
-        string userId)
+    public async Task<IReadOnlyList<SubTask>> ListCompletedUserSubTasksAsync(string userId)
     {
         var spec = new CompletedUserSubTasksSpec(userId);
         var subTasks = await _subTaskRepo.ListAllWithSpecAsync(spec);
@@ -38,6 +37,12 @@ public class SubTaskService : ISubTaskService
     public async Task DeleteSubTaskAsync(SubTask subTask)
     {
         _subTaskRepo.Delete(subTask);
+        await _subTaskRepo.SaveChangesAsync();
+    }
+
+    public async Task SaveSubtasksOrderAsync(SubTask[] orderedSubtasks)
+    {
+        _subTaskRepo.UpdateRange(orderedSubtasks);
         await _subTaskRepo.SaveChangesAsync();
     }
 }

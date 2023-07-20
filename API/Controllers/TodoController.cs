@@ -29,10 +29,10 @@ public class TodoController : BaseApiController
         return Ok(todo);
     }
 
-    [HttpPost("orders")]
-    public async Task<ActionResult> SaveTodosOrder(SaveItemsOrderDto order)
+    [HttpPut("orders")]
+    public async Task<ActionResult> SaveTodosOrder(Todo[] orderedTodos)
     {
-        await _todoService.SaveTodosOrderAsync((int)order.BoardId, order.Todos);
+        await _todoService.SaveTodosOrderAsync(orderedTodos);
         return Ok();
     }
 

@@ -1,12 +1,10 @@
-using Core.Dtos;
 using Core.Entities;
 
 namespace Core.Interfaces;
 
 public interface ITodoService
 {
-    Task<IReadOnlyList<Todo>> ListTodosAsync(int boardId);
-    Task SaveTodosOrderAsync(int boardId, List<OrderedItem> todos);
+    Task SaveTodosOrderAsync(Todo[] orderedTodos);
 
     Task<Todo> GetTodoAsync(int todoId, string userId);
     Task<Todo> CreateTodoAsync(Todo todo);

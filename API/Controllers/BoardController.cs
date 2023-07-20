@@ -18,7 +18,11 @@ public class BoardController : BaseApiController
     private readonly IChatGPTService _chatGPTService;
     private readonly IMapper _mapper;
 
-    public BoardController(IBoardService boardService, IMapper mapper, IChatGPTService chatGPTService)
+    public BoardController(
+        IBoardService boardService,
+        IMapper mapper,
+        IChatGPTService chatGPTService
+    )
     {
         _chatGPTService = chatGPTService;
         _boardService = boardService;
@@ -53,8 +57,7 @@ public class BoardController : BaseApiController
     public async Task<ActionResult<Board>> AddManyBoards(CreateBoardsDto payload)
     {
         string userId = User.GetUserId();
-        var result = await _boardService.CreateUserBoardsAsync(
-            payload.Boards, userId);
+        var result = await _boardService.CreateUserBoardsAsync(payload.Boards, userId);
 
         return Ok(result);
     }
@@ -65,14 +68,20 @@ public class BoardController : BaseApiController
         string userId = User.GetUserId();
         var result = await _boardService.GetUserBoardAsync(id, userId);
 
-        if (result == null) return NotFound(
-            new ApiErrorResponse(404, "Board was not found not"));
+        if (result == null)
+            return NotFound(new ApiErrorResponse(404, "Board was not found not"));
         return Ok(result);
     }
 
+    [HttpPut("orders")]
+    public async Task<ActionResult> SaveBoardsOrder(Board[] orderedBoards)
+    {
+        await _boardService.SaveBoardsOrderAsync(orderedBoards);
+        return Ok();
+    }
+
     [HttpPut("{id}")]
-    public async Task<ActionResult<Board>> UpdateBoard(
-        int id, UpdateBoardDto boardDto)
+    public async Task<ActionResult<Board>> UpdateBoard(int id, UpdateBoardDto boardDto)
     {
         string userId = User.GetUserId();
         var board = _mapper.Map<Board>(boardDto);
@@ -81,18 +90,16 @@ public class BoardController : BaseApiController
 
         var result = await _boardService.UpdateUserBoardAsync(board);
 
-        if (result == null) return NotFound(
-            new ApiErrorResponse(404, "Board was not found not"));
+        if (result == null)
+            return NotFound(new ApiErrorResponse(404, "Board was not found not"));
         return Ok(result);
     }
 
     [HttpPut("{id}/status")]
-    public async Task<ActionResult> UpdateBoardStatus(
-        int id, UpdateStatusDto statusDto)
+    public async Task<ActionResult> UpdateBoardStatus(int id, UpdateStatusDto statusDto)
     {
         string userId = User.GetUserId();
-        await _boardService.UpdateUserBoardStatusAsync(
-            id, userId, statusDto.Status);
+        await _boardService.UpdateUserBoardStatusAsync(id, userId, statusDto.Status);
         return Ok();
     }
 
@@ -110,12 +117,11 @@ public class BoardController : BaseApiController
     {
         string userId = User.GetUserId();
         var board = await _boardService.GetUserBoardAsync(id, userId);
-        if (board == null) return NotFound(
-            new ApiErrorResponse(404, "Board was not found not"));
+        if (board == null)
+            return NotFound(new ApiErrorResponse(404, "Board was not found not"));
 
         var excelMappedBoard = _mapper.Map<ExcelBoard>(board);
-        MemoryStream stream = _boardService
-            .GenerateBoardExcelFileAsync(excelMappedBoard);
+        MemoryStream stream = _boardService.GenerateBoardExcelFileAsync(excelMappedBoard);
 
         string fileName = $"{board.Name}.xlsx";
         string mimeType = "application/octet-stream";

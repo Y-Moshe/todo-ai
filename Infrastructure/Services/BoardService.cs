@@ -96,8 +96,7 @@ public class BoardService : IBoardService
         worksheet.Cells["B2"].SetStyle(subTasksStyle);
 
         string json = JsonSerializer.Serialize(board);
-        JsonLayoutOptions layoutOptions =
-            new JsonLayoutOptions { ArrayAsTable = true };
+        JsonLayoutOptions layoutOptions = new JsonLayoutOptions { ArrayAsTable = true };
         JsonUtility.ImportData(json, worksheet.Cells, 0, 0, layoutOptions);
 
         MemoryStream stream = new MemoryStream();
@@ -118,8 +117,7 @@ public class BoardService : IBoardService
         return board;
     }
 
-    public async Task UpdateUserBoardStatusAsync(
-        int boardId, string userId, bool status)
+    public async Task UpdateUserBoardStatusAsync(int boardId, string userId, bool status)
     {
         var board = await this.GetUserBoardAsync(boardId, userId);
 
@@ -137,6 +135,12 @@ public class BoardService : IBoardService
     public async Task DeleteUserBoardAsync(Board board)
     {
         _boardRepo.Delete(board);
+        await _boardRepo.SaveChangesAsync();
+    }
+
+    public async Task SaveBoardsOrderAsync(Board[] orderedBoards)
+    {
+        _boardRepo.UpdateRange(orderedBoards);
         await _boardRepo.SaveChangesAsync();
     }
 }

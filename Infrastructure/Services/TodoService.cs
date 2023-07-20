@@ -1,4 +1,3 @@
-using Core.Dtos;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
@@ -27,21 +26,9 @@ public class TodoService : ITodoService
         await _repository.SaveChangesAsync();
     }
 
-    public async Task<IReadOnlyList<Todo>> ListTodosAsync(int boardId)
+    public async Task SaveTodosOrderAsync(Todo[] orderedTodos)
     {
-        var spec = new PopulatedBoardTodosSpec(boardId);
-        return await _repository.ListAllWithSpecAsync(spec);
-    }
-
-    public async Task SaveTodosOrderAsync(int boardId, List<OrderedItem> orderedTodos)
-    {
-        var todos = await this.ListTodosAsync(boardId);
-        foreach (var todo in todos)
-        {
-            var shortTodo = orderedTodos.Find(a => a.Id == todo.Id);
-            todo.Order = shortTodo.Order;
-        }
-
+        _repository.UpdateRange(orderedTodos);
         await _repository.SaveChangesAsync();
     }
 

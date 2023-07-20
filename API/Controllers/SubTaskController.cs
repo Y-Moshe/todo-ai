@@ -23,8 +23,7 @@ public class SubTaskController : BaseApiController
     }
 
     [HttpGet("completed")]
-    public async Task<ActionResult<IReadOnlyList<SubTask>>>
-        GetCompletedSubTasksAsync()
+    public async Task<ActionResult<IReadOnlyList<SubTask>>> GetCompletedSubTasksAsync()
     {
         string userId = User.GetUserId();
         var list = await _subTaskService.ListCompletedUserSubTasksAsync(userId);
@@ -40,9 +39,15 @@ public class SubTaskController : BaseApiController
         return Ok(subTask);
     }
 
+    [HttpPut("orders")]
+    public async Task<ActionResult> SaveSubtasksOrder(SubTask[] orderedSubtasks)
+    {
+        await _subTaskService.SaveSubtasksOrderAsync(orderedSubtasks);
+        return Ok();
+    }
+
     [HttpPut("{id}")]
-    public async Task<ActionResult<SubTask>> UpdateSubTask(
-        int id, SubTaskDto taskDto)
+    public async Task<ActionResult<SubTask>> UpdateSubTask(int id, SubTaskDto taskDto)
     {
         var subTask = _mapper.Map<SubTask>(taskDto);
         subTask.Id = id;
@@ -50,8 +55,8 @@ public class SubTaskController : BaseApiController
 
         var result = await _subTaskService.UpdateSubTaskAsync(subTask);
 
-        if (result == null) return NotFound(
-            new ApiErrorResponse(404, "SubTask not found!"));
+        if (result == null)
+            return NotFound(new ApiErrorResponse(404, "SubTask not found!"));
         return Ok(result);
     }
 

@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+public class GenericRepository<T> : IGenericRepository<T>
+    where T : BaseEntity
 {
     private AppDbContext _context { get; set; }
 
@@ -59,6 +60,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         _context.Set<T>().Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
+    }
+
+    public void UpdateRange(T[] entities)
+    {
+        _context.UpdateRange(entities);
     }
 
     public void Delete(T entity)

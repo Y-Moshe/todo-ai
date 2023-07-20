@@ -11,6 +11,7 @@ public interface IBoardService
     Task<Board> CreateUserBoardAsync(Board board, string userId);
     Task<Board[]> CreateUserBoardsAsync(Board[] boards, string userId);
 
+    Task SaveBoardsOrderAsync(Board[] orderedBoards);
     Task<Board> UpdateUserBoardAsync(Board board);
     Task UpdateUserBoardStatusAsync(int boardId, string userId, bool status);
     Task DeleteUserBoardAsync(Board board);

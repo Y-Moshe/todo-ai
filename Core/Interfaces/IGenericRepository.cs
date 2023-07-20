@@ -13,6 +13,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     void Add(T entity);
     void AddRange(T[] entity);
     void Update(T entity);
+    void UpdateRange(T[] entity);
     void Delete(T entity);
     Task<int> SaveChangesAsync();
 }
